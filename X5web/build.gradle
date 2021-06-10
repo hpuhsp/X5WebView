@@ -19,14 +19,33 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+        }
         release {
-            minifyEnabled true
+            minifyEnabled false
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
+    }
+    // Available in Android Gradle Plugin 3.6.0
+//    viewBinding {
+//        enabled = true
+//    }
+    // Available in Android Gradle Plugin 4.0
+    buildFeatures {
+        viewBinding = true
+    }
+    lintOptions {
+        checkReleaseBuilds true
+        abortOnError false
     }
 }
 
