@@ -23,9 +23,28 @@ allprojects {
         maven { url 'https://jitpack.io' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
     }
+    // 解决上传乱码问题
+    tasks.withType(Javadoc) {
+        options {
+            encoding "UTF-8"
+            charSet "UTF-8"
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
+configurations.all {
+    resolutionStrategy {
+        eachDependency { details ->
+            // Force all of the primary libraries to use the same version.
+            if (details.requested.name == 'appcompat'
+                    && details.requested.name == 'annotation'
+                    && details.requested.name == 'recyclerview') {
+                details.useVersion rootProject.ext.version["androidXSdkVersion"]
+            }
+        }
+    }
+}
